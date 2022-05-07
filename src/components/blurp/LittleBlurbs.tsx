@@ -5,14 +5,15 @@ import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { LittleBlurbConfigs } from './BlurpConfigs'
+import { BlurbService } from 'src/services/BlurbSerivce';
 
 export default function LittleBlurbs() {
+  const littleBlurbs = new BlurbService().getAllLittleBlurbs();
   return (
     <Grid container spacing={4}>
-        {LittleBlurbConfigs.map((blurp) => (
+        {littleBlurbs.map((blurp) => (
         <Grid item xs={12} md={6}>
-            <CardActionArea component="a" href="#">
+            <CardActionArea component="a" href={"/my-dev-page/post/" + blurp.id }>
                 <Card sx={{ display: 'flex' }}>
                 <CardContent sx={{ flex: 1 }}>
                     <Typography component="h2" variant="h5">
@@ -22,7 +23,7 @@ export default function LittleBlurbs() {
                     {blurp.date}
                     </Typography>
                     <Typography variant="subtitle1" paragraph>
-                    {blurp.description}
+                    {blurp.description.substring(0,20)}...
                     </Typography>
                     <Typography variant="subtitle1" color="primary">
                     Continue reading...

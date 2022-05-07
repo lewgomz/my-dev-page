@@ -59,8 +59,8 @@ export default function Header(props: HeaderProps) {
                     sx={{ p: 1, flexShrink: 0 }}
                 >
                     <>
-                        {section.icon && <section.icon />}
-                        <span>{section.title}</span>
+                        {section.icon && <section.icon key={section.title + '-icon'} />}
+                        <span key={section.title + '-span'}>{section.title}</span>
                     </>
                 </Link>
                 
