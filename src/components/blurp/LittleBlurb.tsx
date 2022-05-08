@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import { BlurbService } from '../../services/BlurbSerivce';
 
 export default function LittleBlurb() {
@@ -13,23 +17,28 @@ export default function LittleBlurb() {
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 {blurb && <>
-                    <Grid item xs={12}>
-                    <Typography variant="h3">
-                            {blurb.title}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={5} md={4}>
-                        <img
-                            src={`${blurb.image}?w=164&h=164&fit=crop&auto=format`}
-                            srcSet={`${blurb.image}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                    <Grid item key={blurb.title} xs={12} sm={6} md={4}>
+                        <Card
+                        sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                        >
+                        <CardMedia
+                            component="img"
+                            sx={{
+                            // 16:9
+                            pt: '56.25%',
+                            }}
+                            image={blurb.image}
                             alt={blurb.title}
-                            loading="lazy"
                         />
-                    </Grid>
-                    <Grid item xs={7} md={6}>
-                        <Typography variant="body1" paragraph>
+                        <CardContent sx={{ flexGrow: 1 }}>
+                            <Typography gutterBottom variant="h5" component="h2">
+                            {blurb.title}
+                            </Typography>
+                            <Typography>
                             {blurb.description}
-                        </Typography>
+                            </Typography>
+                        </CardContent>
+                        </Card>
                     </Grid>
                 </>}
             </Grid>

@@ -12,7 +12,7 @@ export default function Content() {
         <Grid container spacing={2}>
           <Grid item xs={3} md={2}>
             <Avatar alt="Lewis Gomez" src="https://avatars.githubusercontent.com/u/105124673?v=4"
-              sx={{ width: 120, height: 120 }}
+              sx={{ width: '100%', height: '100%' }}
             />
           </Grid>
           <Grid item xs={9} md={10}>
