@@ -23,10 +23,10 @@ const darkTheme = createTheme({
 
 function App() {
   const sections = [
-    { title: 'Home', url: '/my-dev-page', icon: HomeIcon },
-    { title: 'GitHub', url: 'https://github.com/lewgomz', icon: GitHubIcon },
-    { title: 'Resume', url: '#', icon: WorkIcon },
-    { title: 'LinkedIn', url: 'https://www.linkedin.com/in/lg-luisgomez/', icon: LinkedInIcon },
+    { title: 'Home', url: '/my-dev-page', icon: HomeIcon, routeType: 'internal' },
+    { title: 'Resume', url: '#', icon: WorkIcon, routeType: 'internal' },
+    { title: 'GitHub', url: 'https://github.com/lewgomz', icon: GitHubIcon, routeType: 'external' },
+    { title: 'LinkedIn', url: 'https://www.linkedin.com/in/lg-luisgomez/', icon: LinkedInIcon, routeType: 'external' },
   ];
   return (
     <ThemeProvider theme={darkTheme}>

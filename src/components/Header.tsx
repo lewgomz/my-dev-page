@@ -5,19 +5,57 @@ import IconButton from '@mui/material/IconButton';
 import MoodIcon from '@mui/icons-material/Mood';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import { Link as routerLink } from 'react-router-dom';
+
+interface Section {
+  readonly title: string;
+  readonly url: string;
+  readonly routeType: string;
+  readonly icon?: React.ElementType;
+}
 
 interface HeaderProps {
-  sections: ReadonlyArray<{
-    title: string;
-    url: string;
-    icon?: React.ElementType;
-  }>;
+  sections: Section[];
   title: string;
 }
 
 export default function Header(props: HeaderProps) {
   const { sections, title } = props;
 
+  const getLink = (section: Section) => {
+    if (section.routeType === 'internal') {
+      return <Link
+            component={routerLink}
+            color="inherit"
+            noWrap
+            key={section.title}
+            variant="body2"
+            to={section.url}
+            sx={{ p: 1, flexShrink: 0 }}            
+        >
+            <>
+                {section.icon && <section.icon key={section.title + '-icon'} />}
+                <span key={section.title + '-span'}>{section.title}</span>
+            </>
+        </Link>
+    } else {
+      return <Link
+        component="a"
+        noWrap
+        color="inherit"
+        variant="body2"
+        href={section.url}
+        key={section.title}
+        sx={{ p: 1, flexShrink: 0 }}  
+        target="_blank"
+        rel="noreferrer">
+        <>
+          {section.icon && <section.icon key={section.title + '-icon'} />}
+          <span key={section.title + '-span'}>{section.title}</span>
+        </>
+      </Link>
+    }
+  };
   return (
     <>
       <Toolbar sx={{ 
@@ -49,23 +87,7 @@ export default function Header(props: HeaderProps) {
         sx={{ justifyContent: 'space-between', overflowX: 'auto', }}
       >
         {sections.map((section) => (
-            <>
-                <Link
-                    color="inherit"
-                    noWrap
-                    key={section.title}
-                    variant="body2"
-                    href={section.url}
-                    sx={{ p: 1, flexShrink: 0 }}
-                >
-                    <>
-                        {section.icon && <section.icon key={section.title + '-icon'} />}
-                        <span key={section.title + '-span'}>{section.title}</span>
-                    </>
-                </Link>
-                
-            </>
-          
+            getLink(section)
         ))}
       </Toolbar>
     </>

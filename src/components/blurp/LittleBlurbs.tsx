@@ -6,6 +6,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { BlurbService } from 'src/services/BlurbSerivce';
+import { Link } from 'react-router-dom';
 
 export default function LittleBlurbs() {
   const littleBlurbs = new BlurbService().getAllLittleBlurbs();
@@ -13,7 +14,7 @@ export default function LittleBlurbs() {
     <Grid container spacing={4}>
         {littleBlurbs.map((blurp) => (
         <Grid item xs={12} md={6}>
-            <CardActionArea component="a" href={"/my-dev-page/post/" + blurp.id }>
+            <CardActionArea component={Link} to={"/my-dev-page/post/" + blurp.id }>
                 <Card sx={{ display: 'flex' }}>
                 <CardContent sx={{ flex: 1 }}>
                     <Typography component="h2" variant="h5">

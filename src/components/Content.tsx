@@ -11,10 +11,11 @@ export default function Content() {
         <Grid container spacing={2}>
           <Grid item xs={2}>
             <Avatar alt="Lewis Gomez" src="https://avatars.githubusercontent.com/u/105124673?v=4"
-              sx={{ width: 260, height: 260 }} />
+              sx={{ width: 120, height: 120 }}
+            />
           </Grid>
           <Grid item xs={10}>
-              I want to add a bio here or something cool!
+              I want to add a bio here or something cool! Idk what to say but this is about me! 🐲
           </Grid>
           <Grid item xs={12}>
             <LittleBlurbs />
