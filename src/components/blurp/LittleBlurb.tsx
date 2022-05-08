@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { BlurbService } from '../../services/BlurbSerivce';
@@ -14,7 +13,7 @@ export default function LittleBlurb() {
     let blurbId = params.id as string;
     const blurb = new BlurbService().getLittleBurb(blurbId);
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, pb: 10 }}>
             <Grid container spacing={2}>
                 {blurb && <>
                     <Grid item key={blurb.title} xs={12} sm={6} md={4}>
@@ -23,10 +22,6 @@ export default function LittleBlurb() {
                         >
                         <CardMedia
                             component="img"
-                            sx={{
-                            // 16:9
-                            pt: '56.25%',
-                            }}
                             image={blurb.image}
                             alt={blurb.title}
                         />

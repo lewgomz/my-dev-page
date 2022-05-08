@@ -19,26 +19,26 @@ export const LittleBlurbConfigs: BlurbConfig[] = [
     {
         id: '2',
         date: '2022-05-12',
-        description: 'something super cool',
+        description: 'This portfolio is built using React and TypeScript. 🤩',
         image: 'https://media.giphy.com/media/26n7b7PjSOZJwVCmY/giphy.gif',
         imageLabel: 'someimagelable',
-        title: "Something Interesting"
+        title: "Portfolio Stack"
     },
     {
         id: '3',
         date: '2022-05-12',
-        description: 'something super cool',
+        description: 'I enjoy listening to music and playing drums to fun tunes! 🥁🎶',
         image: 'https://media.giphy.com/media/Hcw7rjsIsHcmk/giphy.gif',
         imageLabel: 'someimagelable',
-        title: "super cool"
+        title: "Music Lover!"
     },
     {
         id: '4',
         date: '2022-05-12',
-        description: 'something super cool',
+        description: 'Ruby, Java, Python, JavaScript/TypeScript, SQL, and more!',
         image: 'https://media.giphy.com/media/g1G1FpVnYCTtaTXWWm/giphy.gif',
         imageLabel: 'someimagelable',
-        title: "super cool"
+        title: "Programming Languages I use"
     }
 ];
 
