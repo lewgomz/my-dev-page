@@ -1,19 +1,29 @@
-import * as React from 'react';
+import { motion } from 'framer-motion';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { BlurbService } from 'src/services/BlurbSerivce';
+import { BlurbService } from '../../services/BlurbService';
 import { Link } from 'react-router-dom';
+
+const container = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.12 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
 
 export default function LittleBlurbs() {
   const littleBlurbs = new BlurbService().getAllLittleBlurbs();
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={4} component={motion.div} variants={container} initial="hidden" animate="show">
         {littleBlurbs.map((blurp) => (
-        <Grid item xs={12} md={6}>
+        <Grid item key={blurp.id} xs={12} md={6} component={motion.div} variants={item}>
             <CardActionArea component={Link} to={"/my-dev-page/post/" + blurp.id }>
                 <Card sx={{ display: 'flex' }}>
                 <CardContent sx={{ flex: 1 }}>

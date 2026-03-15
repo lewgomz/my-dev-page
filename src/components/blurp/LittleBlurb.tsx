@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -6,12 +5,12 @@ import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { BlurbService } from '../../services/BlurbSerivce';
+import { BlurbService } from '../../services/BlurbService';
 
 export default function LittleBlurb() {
     let params = useParams();
     let blurbId = params.id as string;
-    const blurb = new BlurbService().getLittleBurb(blurbId);
+    const blurb = new BlurbService().getLittleBlurb(blurbId);
     return (
         <Box sx={{ flexGrow: 1, pb: 10 }}>
             <Grid container spacing={2}>
