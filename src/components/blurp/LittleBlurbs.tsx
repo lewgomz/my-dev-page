@@ -1,55 +1,62 @@
 import { motion } from 'framer-motion';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import { BlurbService } from '../../services/BlurbService';
 import { Link } from 'react-router-dom';
+import { Card, CardContent } from '@/components/ui/card';
+import { BlurbService } from '../../services/BlurbService';
 
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.12 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: 'easeOut' } },
 };
 
 export default function LittleBlurbs() {
   const littleBlurbs = new BlurbService().getAllLittleBlurbs();
   return (
-    <Grid container spacing={4} component={motion.div} variants={container} initial="hidden" animate="show">
-        {littleBlurbs.map((blurp) => (
-        <Grid item key={blurp.id} xs={12} md={6} component={motion.div} variants={item}>
-            <CardActionArea component={Link} to={"/my-dev-page/post/" + blurp.id }>
-                <Card sx={{ display: 'flex' }}>
-                <CardContent sx={{ flex: 1 }}>
-                    <Typography component="h2" variant="h5">
-                    {blurp.title}
-                    </Typography>
-                    <Typography variant="subtitle1" color="text.secondary">
-                    {blurp.date}
-                    </Typography>
-                    <Typography variant="subtitle1" paragraph>
-                    {blurp.description.substring(0,20)}...
-                    </Typography>
-                    <Typography variant="subtitle1" color="primary">
-                    Continue reading...
-                    </Typography>
-                </CardContent>
-                <CardMedia
-                    component="img"
-                    sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-                    image={blurp.image}
+    <motion.div
+      className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch"
+      variants={container}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.1 }}
+    >
+      {littleBlurbs.map((blurp) => (
+        <motion.div
+          key={blurp.id}
+          className="h-full"
+          variants={item}
+          whileHover={{ y: -4, transition: { duration: 0.2 } }}
+        >
+          <Link to={'/my-dev-page/post/' + blurp.id} className="block group h-full">
+            <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/40 hover:border-foreground/20">
+              <CardContent className="p-4 h-full flex flex-col">
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="space-y-0.5 flex-1">
+                    <h2 className="font-semibold text-base leading-snug">{blurp.title}</h2>
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(blurp.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+                    </p>
+                  </div>
+                  <img
+                    src={blurp.image}
                     alt={blurp.imageLabel}
-                />
-                </Card>
-            </CardActionArea>
-        </Grid>
-        ))}
-    </Grid>
+                    className="w-14 h-14 rounded-lg object-cover shrink-0"
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                  {blurp.description.substring(0, 200)}...
+                </p>
+                <p className="text-xs font-medium text-sky-500 group-hover:underline mt-3">
+                  Continue reading...
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>
+      ))}
+    </motion.div>
   );
 }

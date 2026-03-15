@@ -1,106 +1,79 @@
-import { ElementType } from 'react';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import { Link as routerLink } from 'react-router-dom';
-
-interface Section {
-  readonly title: string;
-  readonly url: string;
-  readonly routeType: string;
-  readonly icon?: ElementType;
-}
+import { Link, useNavigate } from 'react-router-dom';
+import { Moon, Sun, Github, Linkedin, Home, Briefcase } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface HeaderProps {
-  sections: Section[];
-  title: string;
   onToggleTheme: () => void;
   themeMode: 'light' | 'dark';
 }
 
-export default function Header(props: HeaderProps) {
-  const { sections, title, onToggleTheme, themeMode } = props;
-
-  const getLink = (section: Section) => {
-    if (section.routeType === 'internal') {
-      return <Link
-            component={routerLink}
-            color="text.primary"
-            noWrap
-            key={section.title}
-            variant="body2"
-            to={section.url}
-            sx={{ p: 1, flexShrink: 0 }}
-        >
-            <>
-                {section.icon && <section.icon />}
-                <span>{section.title}</span>
-            </>
-        </Link>
-    } else {
-      return <Link
-        component="a"
-        noWrap
-        color="inherit"
-        variant="body2"
-        href={section.url}
-        key={section.title}
-        sx={{ p: 1, flexShrink: 0 }}
-        target="_blank"
-        rel="noreferrer">
-        <>
-          {section.icon && <section.icon />}
-          <span>{section.title}</span>
-        </>
-      </Link>
-    }
-  };
+export default function Header({ onToggleTheme, themeMode }: HeaderProps) {
+  const navigate = useNavigate();
 
   return (
-    <>
-      <Toolbar sx={{
-        borderBottom: 1,
-        borderColor: 'divider',
-        bgcolor: 'background.default',
-        color: 'text.primary', }}>
-        <Button size="small">Fun Stuff</Button>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 1 }}
-        >
-          {title}
-        </Typography>
-        <IconButton onClick={onToggleTheme} aria-label="toggle theme">
-          {themeMode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-        </IconButton>
-        <Button variant="outlined" size="small">
-          Contact Me
-        </Button>
-      </Toolbar>
-      <Toolbar
-        component="nav"
-        variant="dense"
-        sx={{
-          justifyContent: 'space-between',
-          overflowX: 'auto',
-          bgcolor: 'background.default',
-          color: 'text.primary',
-          borderBottom: 1,
-          borderColor: 'divider',
-        }}
-      >
-        {sections.map((section) => (
-            getLink(section)
-        ))}
-      </Toolbar>
-    </>
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="max-w-5xl mx-auto px-4">
+        {/* Top bar */}
+        <div className="flex items-center justify-between h-14">
+          <button
+            onClick={() => navigate('/my-dev-page')}
+            className="text-base font-semibold tracking-tight hover:text-primary transition-colors"
+          >
+            Lewis Gomez
+          </button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onToggleTheme}
+              aria-label="toggle theme"
+            >
+              {themeMode === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+            <Button variant="outline" size="sm">
+              Contact Me
+            </Button>
+          </div>
+        </div>
+
+        {/* Nav bar */}
+        <nav className="flex items-center gap-1 h-10 text-sm">
+          <Link
+            to="/my-dev-page"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          >
+            <Home className="h-3.5 w-3.5" />
+            Home
+          </Link>
+          <a
+            href="/my-dev-page/resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          >
+            <Briefcase className="h-3.5 w-3.5" />
+            Resume
+          </a>
+          <a
+            href="https://github.com/lewgomz"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          >
+            <Github className="h-3.5 w-3.5" />
+            GitHub
+          </a>
+          <a
+            href="https://www.linkedin.com/in/lg-luisgomez/"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          >
+            <Linkedin className="h-3.5 w-3.5" />
+            LinkedIn
+          </a>
+        </nav>
+      </div>
+    </header>
   );
 }
