@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Moon, Sun, Github, Linkedin, Home, Briefcase } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface HeaderProps {
   onToggleTheme: () => void;
@@ -30,11 +31,14 @@ export default function Header({ onToggleTheme, themeMode }: HeaderProps) {
             >
               {themeMode === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <Button variant="outline" size="sm" asChild>
-              <a href="https://www.linkedin.com/in/lg-luisgomez/" target="_blank" rel="noreferrer">
-                Contact Me
-              </a>
-            </Button>
+            <a
+              href="https://www.linkedin.com/in/lg-luisgomez/"
+              target="_blank"
+              rel="noreferrer"
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}
+            >
+              Contact Me
+            </a>
           </div>
         </div>
 
