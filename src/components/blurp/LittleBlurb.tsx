@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, easeInOut } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { BlurbService } from '../../services/BlurbService';
@@ -8,7 +8,11 @@ import { BlurbService } from '../../services/BlurbService';
 const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 14 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.4, ease: 'easeOut', delay },
+    transition: { 
+        duration: 0.4, 
+        ease: easeInOut,
+        delay 
+    },
 });
 
 export default function LittleBlurb() {

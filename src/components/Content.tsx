@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, easeInOut, Variants } from 'framer-motion';
 import {
   DndContext,
   closestCenter,
@@ -25,22 +25,31 @@ import { Separator } from '@/components/ui/separator';
 
 const heroVariants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeInOut } },
 };
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: easeInOut } },
 };
 
 const skillsContainer = {
   show: { transition: { staggerChildren: 0.04, delayChildren: 0.3 } },
 };
 
-const skillItem = {
+const skillItem: Variants = {
   hidden: { opacity: 0, scale: 0.75 },
-  show: { opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 300, damping: 20 } },
+  show: { 
+    opacity: 1, 
+    scale: 1, 
+    transition: { 
+      type: "spring" as const, 
+      stiffness: 300, 
+      damping: 20 
+    } 
+  },
 };
+
 
 const initialSkills = [
   'React', 'TypeScript', 'Java', 'Python', 'Ruby',
