@@ -13,4 +13,18 @@ export default defineConfig({
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('/node_modules/@xyflow/'))    return 'vendor-flow';
+          if (id.includes('/node_modules/framer-motion')) return 'vendor-motion';
+          if (id.includes('/node_modules/@dnd-kit/'))   return 'vendor-dnd';
+          if (id.includes('/node_modules/react-router') ||
+              id.includes('/node_modules/react-dom/')   ||
+              id.includes('/node_modules/react/'))      return 'vendor-react';
+        },
+      },
+    },
+  },
 });

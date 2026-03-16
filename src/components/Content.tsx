@@ -122,6 +122,7 @@ export default function Content() {
   }
 
   return (
+    <div className="max-w-5xl mx-auto px-4">
     <div className="space-y-8">
       {/* Hero — always animates on mount */}
       <motion.div
@@ -182,6 +183,21 @@ export default function Content() {
 
       <Separator />
 
+      {/* Highlights — featured projects, scroll-triggered */}
+      <motion.section
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: false, amount: 0.1 }}
+        variants={sectionVariants}
+      >
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+          Highlights
+        </h2>
+        <Blurbs />
+      </motion.section>
+
+      <Separator />
+
       {/* Experience — scroll-triggered */}
       <motion.section
         initial="hidden"
@@ -209,21 +225,7 @@ export default function Content() {
         </h2>
         <LittleBlurbs />
       </motion.section>
-
-      <Separator />
-
-      {/* Highlights — scroll-triggered */}
-      <motion.section
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: false, amount: 0.1 }}
-        variants={sectionVariants}
-      >
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-          Highlights
-        </h2>
-        <Blurbs />
-      </motion.section>
+    </div>
     </div>
   );
 }

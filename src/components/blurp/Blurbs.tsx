@@ -1,6 +1,7 @@
-import { motion, easeInOut } from 'framer-motion';  // ✅ Added easeInOut import
+import { Link } from 'react-router-dom';
+import { motion, easeInOut } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { BlurbService } from '../../services/BlurbService';
+import { getFeaturedProjects } from '@/services/ProjectService';
 
 const container = {
   hidden: { opacity: 0 },
@@ -9,43 +10,38 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 24 },
-  show: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 0.4, 
-      ease: easeInOut  // ✅ Fixed: "easeOut" → easeInOut function
-    } 
-  },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeInOut } },
 };
 
 export default function Blurbs() {
-  const blurbs = new BlurbService().getAllBlurbs();
+  const projects = getFeaturedProjects();
   return (
     <motion.div
-      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+      className="grid grid-cols-3 gap-2"
       variants={container}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, amount: 0.1 }}
     >
-      {blurbs.map((blurb) => (
+      {projects.map((project) => (
         <motion.div
-          key={blurb.title}
+          key={project.id}
           variants={item}
           whileHover={{ y: -4, transition: { duration: 0.2 } }}
         >
-          <Card className="h-full flex flex-col overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/40 hover:border-foreground/20">
-            <img
-              src={blurb.image}
-              alt={blurb.title}
-              className="w-full aspect-video object-cover"
-            />
-            <CardContent className="flex-1 p-4 space-y-2">
-              <h2 className="font-semibold text-base">{blurb.title}</h2>
-              <p className="text-sm text-muted-foreground">{blurb.description}</p>
-            </CardContent>
-          </Card>
+          <Link to={`/my-dev-page/projects/${project.id}`} className="block h-full">
+            <Card className="h-full flex flex-col overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/40 hover:border-foreground/20 cursor-pointer">
+              <img
+                src={project.image}
+                alt={project.imageLabel}
+                className="w-full aspect-square sm:aspect-video object-cover"
+              />
+              <CardContent className="flex-1 p-2 sm:p-4 space-y-1">
+                <h2 className="font-semibold text-xs sm:text-base line-clamp-2">{project.title}</h2>
+                <p className="hidden sm:block text-sm text-muted-foreground line-clamp-3">{project.description}</p>
+              </CardContent>
+            </Card>
+          </Link>
         </motion.div>
       ))}
     </motion.div>
