@@ -135,7 +135,7 @@ export default function Content() {
         <div className="flex items-center gap-4">
           <div className="h-14 w-14 rounded-full ring-2 ring-sky-500 ring-offset-2 ring-offset-background shrink-0 overflow-hidden">
             <img
-              src="/my-dev-page/lew-avatar.JPG"
+              src="/lew-avatar.JPG"
               alt="Lewis Gomez"
               className="w-full h-full object-cover"
               style={{ objectPosition: '72% 0%', transform: 'scale(2.7)', transformOrigin: '50% 33%' }}

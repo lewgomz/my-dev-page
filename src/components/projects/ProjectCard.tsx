@@ -10,7 +10,7 @@ interface ProjectCardProps {
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
     <Link
-      to={`/my-dev-page/projects/${project.id}`}
+      to={`/projects/${project.id}`}
       className="block shrink-0 w-48 scroll-snap-align-start cursor-pointer"
       style={{ scrollSnapAlign: 'start' }}
     >

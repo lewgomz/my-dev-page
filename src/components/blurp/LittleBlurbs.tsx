@@ -30,7 +30,7 @@ export default function LittleBlurbs() {
           variants={item}
           whileHover={{ y: -4, transition: { duration: 0.2 } }}
         >
-          <Link to={'/my-dev-page/post/' + blurp.id} className="block group h-full">
+          <Link to={'/post/' + blurp.id} className="block group h-full">
             <Card className="h-full overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/40 hover:border-foreground/20">
               <CardContent className="p-4 h-full flex flex-col">
                 <div className="flex items-start justify-between gap-3 mb-3">

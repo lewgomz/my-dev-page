@@ -2,7 +2,7 @@
 
 Personal portfolio site for Lewis Gomez, Senior Software Development Engineer at Amazon.
 
-Live at: [https://lewgomz.github.io/my-dev-page](https://lewgomz.github.io/my-dev-page)
+Live at: [https://lewgomz.com](https://lewgomz.com)
 
 ## Stack
 

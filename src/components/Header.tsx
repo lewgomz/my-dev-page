@@ -17,7 +17,7 @@ export default function Header({ onToggleTheme, themeMode }: HeaderProps) {
         {/* Top bar */}
         <div className="flex items-center justify-between h-14">
           <button
-            onClick={() => navigate('/my-dev-page')}
+            onClick={() => navigate('/')}
             className="text-base font-semibold tracking-tight hover:text-primary transition-colors"
           >
             Lewis Gomez
@@ -45,14 +45,14 @@ export default function Header({ onToggleTheme, themeMode }: HeaderProps) {
         {/* Nav bar */}
         <nav className="flex items-center gap-1 h-10 text-sm">
           <Link
-            to="/my-dev-page"
+            to="/"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
           >
             <Home className="h-3.5 w-3.5" />
             Home
           </Link>
           <a
-            href="/my-dev-page/resume.pdf"
+            href="/resume.pdf"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"

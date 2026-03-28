@@ -13,7 +13,7 @@ function NotFound() {
       <p className="text-5xl">🤔</p>
       <h1 className="text-2xl font-bold tracking-tight">Whoops</h1>
       <p className="text-muted-foreground text-sm">This route doesn't exist.</p>
-      <Link to="/my-dev-page" className="text-sm text-sky-500 hover:underline underline-offset-4">
+      <Link to="/" className="text-sm text-sky-500 hover:underline underline-offset-4">
         ← Take me home
       </Link>
     </div>

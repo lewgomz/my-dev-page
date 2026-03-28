@@ -29,7 +29,7 @@ export default function Blurbs() {
           variants={item}
           whileHover={{ y: -4, transition: { duration: 0.2 } }}
         >
-          <Link to={`/my-dev-page/projects/${project.id}`} className="block h-full">
+          <Link to={`/projects/${project.id}`} className="block h-full">
             <Card className="h-full flex flex-col overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/40 hover:border-foreground/20 cursor-pointer">
               <img
                 src={project.image}
