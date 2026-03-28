@@ -35,9 +35,9 @@ function App() {
       <main className="flex-1 w-full pt-4 pb-8">
         <Suspense fallback={null}>
           <Routes>
-            <Route path="/my-dev-page" element={<Content />} />
-            <Route path="/my-dev-page/post/:id" element={<LittleBlurb />} />
-            <Route path="/my-dev-page/projects/:id" element={<ProjectDetail />} />
+            <Route path="/" element={<Content />} />
+            <Route path="/post/:id" element={<LittleBlurb />} />
+            <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
