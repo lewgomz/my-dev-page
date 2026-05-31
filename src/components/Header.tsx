@@ -1,4 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Moon, Sun, Github, Linkedin, Home, Briefcase } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -8,11 +9,49 @@ interface HeaderProps {
   themeMode: 'light' | 'dark';
 }
 
+/**
+ * Hide the header while the user is still on the splash (home route, scroll near top);
+ * fade it in once the user scrolls past ~60% of viewport height.
+ * On non-home routes the header is always visible.
+ */
+function useHiddenOverSplash(): boolean {
+  const location = useLocation();
+  const [hidden, setHidden] = useState(location.pathname === '/');
+
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setHidden(false);
+      return;
+    }
+    const threshold = () => window.innerHeight * 0.6;
+    const onScroll = () => setHidden(window.scrollY < threshold());
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [location.pathname]);
+
+  return hidden;
+}
+
 export default function Header({ onToggleTheme, themeMode }: HeaderProps) {
   const navigate = useNavigate();
+  const hidden = useHiddenOverSplash();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+        'transition-all duration-500 ease-out',
+        hidden
+          ? 'opacity-0 -translate-y-2 pointer-events-none'
+          : 'opacity-100 translate-y-0 pointer-events-auto'
+      )}
+      aria-hidden={hidden}
+    >
       <div className="max-w-5xl mx-auto px-4">
         {/* Top bar */}
         <div className="flex items-center justify-between h-14">

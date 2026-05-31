@@ -23,14 +23,14 @@ export default function LittleBlurb() {
 
     if (!blurb) {
         return (
-            <div className="max-w-3xl mx-auto px-4 text-center py-16 text-muted-foreground">
+            <div className="max-w-3xl mx-auto px-4 text-center py-16 pt-24 text-muted-foreground">
                 Post not found.
             </div>
         );
     }
 
     return (
-        <div className="max-w-3xl mx-auto px-4 space-y-4">
+        <div className="max-w-3xl mx-auto px-4 space-y-4 pt-24">
             {/* Back button */}
             <motion.div {...fadeUp(0)}>
                 <Button

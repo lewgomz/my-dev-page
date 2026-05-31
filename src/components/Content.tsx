@@ -17,16 +17,12 @@ import {
   arrayMove,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import HeroSplash from './HeroSplash';
 import LittleBlurbs from './blurp/LittleBlurbs';
 import Blurbs from './blurp/Blurbs';
 import Timeline from './Timeline';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-
-const heroVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeInOut } },
-};
 
 const sectionVariants = {
   hidden: { opacity: 0, y: 32 },
@@ -34,22 +30,21 @@ const sectionVariants = {
 };
 
 const skillsContainer = {
-  show: { transition: { staggerChildren: 0.04, delayChildren: 0.3 } },
+  show: { transition: { staggerChildren: 0.04, delayChildren: 0.1 } },
 };
 
 const skillItem: Variants = {
   hidden: { opacity: 0, scale: 0.75 },
-  show: { 
-    opacity: 1, 
-    scale: 1, 
-    transition: { 
-      type: "spring" as const, 
-      stiffness: 300, 
-      damping: 20 
-    } 
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: 'spring' as const,
+      stiffness: 300,
+      damping: 20,
+    },
   },
 };
-
 
 const initialSkills = [
   'React', 'TypeScript', 'Java', 'Python', 'Ruby',
@@ -64,7 +59,6 @@ function SortableBadge({ id, isAnyDragging }: { id: string; isAnyDragging: boole
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   return (
-    // Outer div: dnd-kit owns transform + transition for smooth neighbor shifting
     <div
       ref={setNodeRef}
       style={{
@@ -73,7 +67,6 @@ function SortableBadge({ id, isAnyDragging }: { id: string; isAnyDragging: boole
         zIndex: isDragging ? 50 : 'auto',
       }}
     >
-      {/* Inner motion.div: Framer Motion owns visual state only */}
       <motion.div
         variants={skillItem}
         animate={isDragging ? { opacity: 0.25, scale: 0.9 } : { opacity: 1, scale: 1 }}
@@ -93,6 +86,17 @@ function SortableBadge({ id, isAnyDragging }: { id: string; isAnyDragging: boole
       </motion.div>
     </div>
   );
+}
+
+// Fixed header height (h-14 top bar + h-10 nav row = 96px) + breathing room
+// so the section heading clears the header on click-to-jump.
+const HEADER_OFFSET_PX = 140;
+
+function scrollToSection(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET_PX;
+  window.scrollTo({ top, behavior: 'smooth' });
 }
 
 export default function Content() {
@@ -122,110 +126,108 @@ export default function Content() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4">
-    <div className="space-y-8">
-      {/* Hero — always animates on mount */}
-      <motion.div
-        initial="hidden"
-        animate="show"
-        variants={heroVariants}
-        className="space-y-4"
-      >
-        {/* Avatar + name/title inline */}
-        <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-full ring-2 ring-sky-500 ring-offset-2 ring-offset-background shrink-0 overflow-hidden">
-            <img
-              src="/lew-avatar.JPG"
-              alt="Lewis Gomez"
-              className="w-full h-full object-cover"
-              style={{ objectPosition: '72% 0%', transform: 'scale(2.7)', transformOrigin: '50% 33%' }}
-            />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">Lewis Gomez</h1>
-            <p className="text-muted-foreground text-sm">Senior Software Development Engineer · Amazon</p>
-          </div>
+    <>
+      {/* Full-bleed cinematic splash */}
+      <HeroSplash onJumpToSection={(id) => scrollToSection(id)} />
+
+      <div className="max-w-5xl mx-auto px-4 pt-16">
+        <div className="space-y-8">
+          {/* About — bio + draggable skills, scroll-triggered */}
+          <motion.section
+            id="about"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: false, amount: 0.15 }}
+            variants={sectionVariants}
+            className="space-y-4 scroll-mt-24"
+          >
+            <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-muted-foreground mb-3">
+              About
+            </h2>
+            <p className="text-sm leading-relaxed">
+              I build systems that don't page people at 3am. 11+ years at Amazon shipping distributed infrastructure,
+              supply chain tooling, and data pipelines at global scale, and lately building AI-powered products with LLM Models, agentic workflows, and MCP Servers, all leveraging AWS infrastructure.
+            </p>
+
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext items={skills} strategy={rectSortingStrategy}>
+                <motion.div className="flex flex-wrap gap-1.5" variants={skillsContainer} initial="hidden" animate="show">
+                  {skills.map((skill) => (
+                    <SortableBadge key={skill} id={skill} isAnyDragging={activeId !== null} />
+                  ))}
+                </motion.div>
+              </SortableContext>
+
+              <DragOverlay>
+                {activeId ? (
+                  <Badge
+                    variant="outline"
+                    className="text-xs cursor-grabbing select-none bg-sky-500 text-white border-sky-500 shadow-[0_0_16px_rgba(14,165,233,0.6)] scale-110"
+                  >
+                    {activeId}
+                  </Badge>
+                ) : null}
+              </DragOverlay>
+            </DndContext>
+          </motion.section>
+
+          <Separator />
+
+          {/* Highlights — featured projects, scroll-triggered */}
+          <motion.section
+            id="highlights"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: false, amount: 0.1 }}
+            variants={sectionVariants}
+            className="scroll-mt-24"
+          >
+            <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-muted-foreground mb-3">
+              Highlights
+            </h2>
+            <Blurbs />
+          </motion.section>
+
+          <Separator />
+
+          {/* Experience — scroll-triggered */}
+          <motion.section
+            id="experience"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: false, amount: 0.15 }}
+            variants={sectionVariants}
+            className="scroll-mt-24"
+          >
+            <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-muted-foreground mb-3">
+              Experience
+            </h2>
+            <Timeline />
+          </motion.section>
+
+          <Separator />
+
+          {/* Posts — scroll-triggered */}
+          <motion.section
+            id="posts"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: false, amount: 0.1 }}
+            variants={sectionVariants}
+            className="scroll-mt-24"
+          >
+            <h2 className="text-xs font-semibold uppercase tracking-[0.4em] text-muted-foreground mb-3">
+              Posts
+            </h2>
+            <LittleBlurbs />
+          </motion.section>
         </div>
-
-        {/* Description — full width */}
-        <p className="text-sm leading-relaxed">
-          I build systems that don't page people at 3am. 11+ years at Amazon shipping distributed infrastructure,
-          supply chain tooling, and data pipelines at global scale, and lately building AI-powered products with LLM Models, agentic workflows, and MCP Servers, all leveraging AWS infrastructure.
-        </p>
-
-        {/* Skills — draggable */}
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={skills} strategy={rectSortingStrategy}>
-            <motion.div className="flex flex-wrap gap-1.5" variants={skillsContainer} initial="hidden" animate="show">
-              {skills.map((skill) => (
-                <SortableBadge key={skill} id={skill} isAnyDragging={activeId !== null} />
-              ))}
-            </motion.div>
-          </SortableContext>
-
-          <DragOverlay>
-            {activeId ? (
-              <Badge
-                variant="outline"
-                className="text-xs cursor-grabbing select-none bg-sky-500 text-white border-sky-500 shadow-[0_0_16px_rgba(14,165,233,0.6)] scale-110"
-              >
-                {activeId}
-              </Badge>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
-      </motion.div>
-
-      <Separator />
-
-      {/* Highlights — featured projects, scroll-triggered */}
-      <motion.section
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: false, amount: 0.1 }}
-        variants={sectionVariants}
-      >
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-          Highlights
-        </h2>
-        <Blurbs />
-      </motion.section>
-
-      <Separator />
-
-      {/* Experience — scroll-triggered */}
-      <motion.section
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: false, amount: 0.15 }}
-        variants={sectionVariants}
-      >
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-          Experience
-        </h2>
-        <Timeline />
-      </motion.section>
-
-      <Separator />
-
-      {/* Posts — scroll-triggered */}
-      <motion.section
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: false, amount: 0.1 }}
-        variants={sectionVariants}
-      >
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
-          Posts
-        </h2>
-        <LittleBlurbs />
-      </motion.section>
-    </div>
-    </div>
+      </div>
+    </>
   );
 }

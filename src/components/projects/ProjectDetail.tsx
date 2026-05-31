@@ -23,7 +23,7 @@ export default function ProjectDetail() {
 
   if (!project) {
     return (
-      <div className="w-[92%] mx-auto text-center py-16 text-muted-foreground">
+      <div className="w-[92%] mx-auto text-center py-16 pt-24 text-muted-foreground">
         Project not found.
       </div>
     );
@@ -32,7 +32,7 @@ export default function ProjectDetail() {
   const timelineEntry = TimelineEntries.find((e) => e.id === project.timelineEntryId);
 
   return (
-    <div className="w-[92%] mx-auto space-y-4">
+    <div className="w-[92%] mx-auto space-y-4 pt-24">
       {/* Back */}
       <motion.div {...fadeUp(0)}>
         <Button
