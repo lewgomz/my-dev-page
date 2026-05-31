@@ -45,7 +45,7 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(0 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -124,10 +124,68 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* html bg follows the same var as body — guarantees no color mismatch
+     between html (visible in overscroll bounce, scrollbar tracks, etc.) and
+     the page body. Also drives `color-scheme` from the `.dark` class so Safari
+     renders native UI (scrollbars, form controls) in sync with the theme. */
+  html {
+    @apply font-sans bg-background text-foreground;
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
   body {
     @apply bg-background text-foreground;
   }
-  html {
-    @apply font-sans;
+}
+
+@layer utilities {
+  /* Cinematic vignette used on the hero splash — outer color matches the page
+     `--background` so the splash flows seamlessly into the rest of the page.
+     We use the more reliable `.dark &` override pattern (Safari's handling of
+     `:root:not(.dark)` selectors inside @layer was inconsistent — the light
+     variant wasn't winning specificity in some renders). */
+  .bg-hero-vignette {
+    /* Light mode default — outer pure white matches body bg in light mode */
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(245, 247, 250, 1) 0%, rgba(255, 255, 255, 1) 70%);
+  }
+  .dark .bg-hero-vignette {
+    /* Dark mode override — outer pure black matches body bg in dark mode */
+    background:
+      radial-gradient(ellipse at 50% 45%, rgba(15, 15, 22, 1) 0%, rgba(0, 0, 0, 1) 70%);
+  }
+
+  /* Hero ring — thick sky-blue stroke with a soft outer bloom, hollow inside.
+     Mirrors the Figma's two-ellipse construction (hard ring + falloff). */
+  .hero-ring {
+    border: 4px solid rgba(14, 165, 233, 0.92);
+    box-shadow:
+      0 0 10px 1px rgba(14, 165, 233, 0.45),
+      0 0 28px 4px rgba(14, 165, 233, 0.16),
+      inset 0 0 10px 1px rgba(14, 165, 233, 0.22);
+  }
+
+  /* Hero cutout portrait — bundles B&W, atmospheric drop-shadow stack, and a
+     bottom-fade mask so the figure dissolves into the splash instead of
+     cutting off at a rectangular bottom edge.
+     All filters live here because `filter` is a single CSS property — combining
+     Tailwind utilities (`grayscale`, `drop-shadow-*`) would overwrite each other. */
+  .hero-cutout {
+    /* Opaque rendering — `mix-blend-mode: lighten` removed so the figure
+       cleanly OCCLUDES the ring stroke wherever they overlap. Edge softness
+       now comes from the alpha-matted cutout's own soft-alpha transitions,
+       not from blend-mode tricks. */
+    filter:
+      grayscale(1)
+      contrast(1.05)
+      drop-shadow(0 8px 14px rgba(0, 0, 0, 0.50))
+      drop-shadow(0 22px 40px rgba(0, 0, 0, 0.35));
+    /* Bottom fade so the rectangular crop edge of the PNG doesn't read as a
+       hard horizontal line where the figure meets the splash. */
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 12%);
+    mask-image: linear-gradient(to top, transparent 0%, black 12%);
   }
 }

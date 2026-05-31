@@ -25,6 +25,11 @@ function App() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', themeMode === 'dark');
+    // Keep the mobile browser chrome (iOS Safari address bar, Android Chrome
+    // toolbar) tinted to match the active theme.
+    const themeColor = themeMode === 'dark' ? '#000000' : '#ffffff';
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', themeColor);
   }, [themeMode]);
 
   const toggleTheme = () => setThemeMode(prev => prev === 'dark' ? 'light' : 'dark');
@@ -32,7 +37,7 @@ function App() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col overflow-x-hidden">
       <Header onToggleTheme={toggleTheme} themeMode={themeMode} />
-      <main className="flex-1 w-full pt-4 pb-8">
+      <main className="flex-1 w-full pb-8">
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<Content />} />
