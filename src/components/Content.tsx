@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion, easeInOut, Variants } from 'framer-motion';
 import {
   DndContext,
@@ -102,6 +103,15 @@ function scrollToSection(id: string) {
 export default function Content() {
   const [skills, setSkills] = useState(initialSkills);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const y = (location.state as { scrollY?: number } | null)?.scrollY;
+    if (y) {
+      requestAnimationFrame(() => window.scrollTo({ top: y, behavior: 'instant' }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // empty deps — only run on mount
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
