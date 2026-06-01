@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion, easeInOut } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { getFeaturedProjects } from '@/services/ProjectService';
@@ -15,6 +15,7 @@ const item = {
 
 export default function Blurbs() {
   const projects = getFeaturedProjects();
+  const navigate = useNavigate();
   return (
     <motion.div
       className="grid grid-cols-3 gap-2"
@@ -29,19 +30,23 @@ export default function Blurbs() {
           variants={item}
           whileHover={{ y: -4, transition: { duration: 0.2 } }}
         >
-          <Link to={`/projects/${project.id}`} className="block h-full">
+          <div
+            className="block h-full cursor-pointer"
+            onClick={() => navigate(`/projects/${project.id}`, { state: { scrollY: window.scrollY } })}
+          >
             <Card className="h-full flex flex-col overflow-hidden transition-shadow hover:shadow-lg hover:shadow-black/10 dark:hover:shadow-black/40 hover:border-foreground/20 cursor-pointer">
               <img
                 src={project.image}
                 alt={project.imageLabel}
+                loading="lazy"
                 className="w-full aspect-square sm:aspect-video object-cover"
               />
               <CardContent className="flex-1 p-2 sm:p-4 space-y-1">
                 <h2 className="font-semibold text-xs sm:text-base line-clamp-2">{project.title}</h2>
-                <p className="hidden sm:block text-sm text-muted-foreground line-clamp-3">{project.description}</p>
+                <p className="hidden sm:block text-sm text-muted-foreground line-clamp-3">{project.summary}</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
         </motion.div>
       ))}
     </motion.div>

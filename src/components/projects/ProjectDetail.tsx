@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { motion, easeInOut } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -18,8 +18,16 @@ const fadeUp = (delay = 0) => ({
 export default function ProjectDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const savedScrollY = (location.state as { scrollY?: number } | null)?.scrollY ?? 0;
   const project = getProject(id ?? '');
   const [activeTab, setActiveTab] = useState<'overview' | 'diagram'>('overview');
+
+  // Forward navigation carries the home page's scrollY in state; without a
+  // reset the detail page renders at that offset. Start at the top on mount.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
 
   if (!project) {
     return (
@@ -38,7 +46,7 @@ export default function ProjectDetail() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/', { state: { scrollY: savedScrollY } })}
           className="gap-1.5 -ml-2 text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />

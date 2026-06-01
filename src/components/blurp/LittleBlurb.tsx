@@ -1,4 +1,5 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { motion, easeInOut } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -18,8 +19,18 @@ const fadeUp = (delay = 0) => ({
 export default function LittleBlurb() {
     const params = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+    const navState = location.state as { scrollY?: number; visibleCount?: number } | null;
+    const savedScrollY = navState?.scrollY ?? 0;
+    const savedVisibleCount = navState?.visibleCount;
     const blurbId = params.id as string;
     const blurb = new BlurbService().getLittleBlurb(blurbId);
+
+    // Forward navigation carries the home page's scrollY in state; without a
+    // reset the detail page renders at that offset. Start at the top on mount.
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, []);
 
     if (!blurb) {
         return (
@@ -36,7 +47,7 @@ export default function LittleBlurb() {
                 <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate('/', { state: { scrollY: savedScrollY, visibleCount: savedVisibleCount } })}
                     className="gap-1.5 -ml-2 text-muted-foreground hover:text-foreground"
                 >
                     <ArrowLeft className="h-4 w-4" />
@@ -65,6 +76,13 @@ export default function LittleBlurb() {
                     <img
                         src={blurb.image}
                         alt={blurb.title}
+                        onError={(event) => {
+                            const img = event.currentTarget;
+                            if (img.dataset.fallbackApplied) return;
+                            img.dataset.fallbackApplied = 'true';
+                            img.src =
+                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%23e2e8f0'/%3E%3C/svg%3E";
+                        }}
                         className="w-full h-full object-cover"
                     />
                 </div>
@@ -75,12 +93,14 @@ export default function LittleBlurb() {
             </motion.div>
 
             {/* Body */}
-            <motion.p
+            <motion.div
                 {...fadeUp(0.15)}
-                className="text-base leading-relaxed text-foreground/90"
+                className="space-y-4 text-base leading-relaxed text-foreground/90"
             >
-                {blurb.description}
-            </motion.p>
+                {blurb.description.split('\n\n').map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                ))}
+            </motion.div>
         </div>
     );
 }
